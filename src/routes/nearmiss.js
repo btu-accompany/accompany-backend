@@ -3,7 +3,8 @@ const router = express.Router();
 const NearMiss = require("../models/NearMiss");
 const multer = require('multer');
 const path = require("path");
-
+const request = require("request");
+require("dotenv/config");
 
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -27,7 +28,7 @@ const upload = multer({
     limits: {
         fileSize: 1024 * 1024 * 6
     },
-    fileFilter: fileFilter,
+    //fileFilter: fileFilter,
 });
 
 
@@ -73,6 +74,7 @@ router.post("/", async (req, res) => {
 
 // near miss olayını kayıt ettikten hemen sonra bu istekte bulun img bölümünü güncellemene yarıyor
 router.patch("/", upload.single("img"), async (req, res) => {
+
     try {
         const updatedNearMiss = await NearMiss.findOneAndUpdate(
             { _id: req.body._id },
@@ -83,6 +85,42 @@ router.patch("/", upload.single("img"), async (req, res) => {
     } catch (error) {
         res.send(error)
     }
+
+});
+
+
+router.post("/notify-users", async (req, res) => {
+
+    const title = req.body.title;
+    const desc = req.body.desc;
+
+    const data = {
+        to: "/topics/nearmiss",
+        notification: {
+            title: title,
+            body: desc
+        },
+        data: {
+            page: "nearmiss"
+        }
+    }
+
+    request({
+        headers: {
+            'Content-Type': 'application/json',
+            "Authorization": "key=" + process.env.FCM_SERVER_KEY
+        },
+        uri: 'https://fcm.googleapis.com/fcm/send',
+        body: JSON.stringify(data),
+        method: 'POST'
+    }, function (error, response, body) {
+        if (error) {
+            res.json(err)
+        } else {
+            res.json(body);
+        }
+    });
+
 
 });
 
