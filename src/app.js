@@ -4,6 +4,8 @@ require("dotenv/config");
 const mongoose = require('mongoose');
 const nearMissRoute = require("./routes/nearmiss")
 const path = require("path");
+const postsRoute = require("./routes/register");
+const contactsRoute = require("./routes/contacts");
 
 const port = process.env.PORT || 3000;
 
@@ -11,6 +13,9 @@ const port = process.env.PORT || 3000;
 app.use('/uploads', express.static("uploads"));
 app.use(express.json());
 app.use("/nearmiss", nearMissRoute);
+app.use("/register", postsRoute);
+app.use("/contacts", contactsRoute);
+
 
 app.get("/", (req, res) => {
     res.send("Ana Sayfa");
