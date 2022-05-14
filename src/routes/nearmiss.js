@@ -28,7 +28,6 @@ const upload = multer({
     limits: {
         fileSize: 1024 * 1024 * 6
     },
-    //fileFilter: fileFilter,
 });
 
 
@@ -54,12 +53,12 @@ router.get("/:nearmiss_id", async (req, res) => {
 });
 
 // near miss olayi kaydet
-router.post("/", async (req, res) => {
-    //TODO kodlanıcak
+router.post("/", upload.single("img"), async (req, res) => {
+
     const nearmiss = new NearMiss({
         title: req.body.title,
         description: req.body.description,
-        img: ""
+        img: req.file.path
     });
 
 
@@ -68,22 +67,6 @@ router.post("/", async (req, res) => {
         res.json(savedNearMiss);
     } catch (error) {
         res.json({ message: error });
-    }
-
-});
-
-// near miss olayını kayıt ettikten hemen sonra bu istekte bulun img bölümünü güncellemene yarıyor
-router.patch("/", upload.single("img"), async (req, res) => {
-
-    try {
-        const updatedNearMiss = await NearMiss.findOneAndUpdate(
-            { _id: req.body._id },
-            { $set: { img: req.file.path } },
-            { new: true }
-        );
-        res.json(updatedNearMiss);
-    } catch (error) {
-        res.send(error)
     }
 
 });
