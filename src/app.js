@@ -6,6 +6,7 @@ const nearMissRoute = require("./routes/nearmiss")
 const path = require("path");
 const postsRoute = require("./routes/register");
 const contactsRoute = require("./routes/contacts");
+const newsRoute = require('./routes/news');
 
 const port = process.env.PORT || 3000;
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/nearmiss", nearMissRoute);
 app.use("/register", postsRoute);
 app.use("/contacts", contactsRoute);
+app.use('/news', newsRoute);
 
 
 app.get("/", (req, res) => {
