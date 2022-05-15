@@ -7,6 +7,7 @@ const path = require("path");
 const postsRoute = require("./routes/register");
 const contactsRoute = require("./routes/contacts");
 const newsRoute = require('./routes/news');
+const SuggestionsRoute=require('./routes/suggestions')
 
 const port = process.env.PORT || 3000;
 
@@ -17,6 +18,7 @@ app.use("/nearmiss", nearMissRoute);
 app.use("/register", postsRoute);
 app.use("/contacts", contactsRoute);
 app.use('/news', newsRoute);
+app.use('/suggestions', SuggestionsRoute);
 
 
 app.get("/", (req, res) => {
