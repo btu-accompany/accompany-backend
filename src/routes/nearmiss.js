@@ -4,6 +4,8 @@ const NearMiss = require("../models/NearMiss");
 const multer = require('multer');
 const path = require("path");
 const request = require("request");
+const verify = require("../utils/verifyToken");
+const ROLE = require("../utils/roles");
 require("dotenv/config");
 
 const storage = multer.diskStorage({
@@ -32,7 +34,7 @@ const upload = multer({
 
 
 //butun nearmiss olaylarini getirme
-router.get('/', async (req, res) => {
+router.get('/', verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
     try {
         const nearmisses = await NearMiss.find();
         res.json(nearmisses);
@@ -43,7 +45,7 @@ router.get('/', async (req, res) => {
 });
 
 // idsi parametere olarak verilen nearmiss olayini getirir
-router.get("/:nearmiss_id", async (req, res) => {
+router.get("/:nearmiss_id", verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
     try {
         const nearMiss = await NearMiss.findById(req.params.nearmiss_id);
         res.json(nearMiss);
@@ -53,7 +55,7 @@ router.get("/:nearmiss_id", async (req, res) => {
 });
 
 // near miss olayi kaydet
-router.post("/", upload.single("img"), async (req, res) => {
+router.post("/", verify.authUser, verify.authRole(ROLE.BASIC), upload.single("img"), async (req, res) => {
 
     const nearmiss = new NearMiss({
         title: req.body.title,
@@ -72,7 +74,7 @@ router.post("/", upload.single("img"), async (req, res) => {
 });
 
 
-router.post("/notify-users", async (req, res) => {
+router.post("/notify-users", verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
 
     const title = req.body.title;
     const desc = req.body.desc;

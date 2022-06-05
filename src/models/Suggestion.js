@@ -4,12 +4,12 @@ const SuggestionSchema = mongoose.Schema({
     type: {
         type: String,
         required: true
-        
+
     },
     name: {
         type: String,
         required: true
-        
+
     },
     fcmToken: {
         type: String,
@@ -18,14 +18,14 @@ const SuggestionSchema = mongoose.Schema({
     surname: {
         type: String,
         required: true
-        
+
     },
     department: {
         type: String,
         required: true
-        
+
     },
-    
+
     topic: {
         type: String,
         required: true
@@ -34,32 +34,32 @@ const SuggestionSchema = mongoose.Schema({
     content: {
         type: String,
         required: true
-        
+
     },
     ppUrl: {
         type: String,
         required: true
-        
+
     },
     phoneNumber: {
         type: String,
         required: true
-        
+
     },
     userId: {
         type: String,
         required: true
-        
+
     },
     userDepartment: {
         type: String,
         required: true
-        
+
     },
-    date:{
-        type:Date,
+    date: {
+        type: Date,
         default: Date.now
     }
 })
 
-module.exports = mongoose.model('suggestions',SuggestionSchema);
+module.exports = mongoose.model('suggestions', SuggestionSchema);
