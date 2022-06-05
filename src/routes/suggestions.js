@@ -2,9 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../models/Suggestion');
+const verify = require("../utils/verifyToken");
+const ROLE = require("../utils/roles");
 
 // Gets all posts
-router.get('/', async (req, res) => {
+router.get('/', verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
     try {
         const posts = await Post.find();
         res.json(posts);
@@ -14,7 +16,7 @@ router.get('/', async (req, res) => {
 });
 
 // post yüklüyor
-router.post('/', async (req, res) => {
+router.post('/', verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
     const post = new Post({
         type: req.body.type,
         name: req.body.name,
@@ -39,7 +41,7 @@ router.post('/', async (req, res) => {
     }
 });
 // get spesifik
-router.get('/:postId', async (req, res) => {
+router.get('/:postId', verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
     try {
         const post = await Post.findById(req.params.postId);
         res.json(post);
@@ -49,9 +51,9 @@ router.get('/:postId', async (req, res) => {
     }
 });
 // delete
-router.delete('/:postId', async (req,res)=>{
-    try{
-        const removedPost = await Post.remove({__id: req.params.postId})
+router.delete('/:postId', verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
+    try {
+        const removedPost = await Post.remove({ __id: req.params.postId })
         res.json(removedPost);
     }
     catch (err) {

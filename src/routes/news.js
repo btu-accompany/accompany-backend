@@ -1,7 +1,9 @@
 const express = require('express');
 const request = require('request');
 const router = express.Router();
-router.get('/', (req, res) => {
+const verify = require("../utils/verifyToken");
+const ROLE = require("../utils/roles");
+router.get('/', verify.authUser, verify.authRole(ROLE.BASIC), (req, res) => {
 
     request({
         headers: {
