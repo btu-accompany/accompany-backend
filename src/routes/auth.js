@@ -9,7 +9,7 @@ router.post('/register', async (req, res) => {
     //Validate
     const { error } = Validation.registerValidation(req.body);
     if (error) {
-        return res.json({ message: error.details[0].message })
+        return res.status(404).json({ message: error.details[0].message })
     }
 
     //Checking if the user is already in the database
@@ -59,19 +59,19 @@ router.post('/login', async (req, res) => {
     //Validate
     const { error } = Validation.loginValidation(req.body);
     if (error) {
-        return res.json({ message: error.details[0].message })
+        return res.status(404).json({ message: error.details[0].message })
     }
     //Checking if the email exists
     const user = await User.findOne({ phoneNumber: req.body.phoneNumber });
 
     if (!user) {
-        return res.json({ message: "Phone number is not found" });
+        return res.status(404).json({ message: "Phone number is not found" });
     }
 
     //Is password correct
     const validPass = await bcrypt.compare(req.body.password, user.password);
     if (!validPass) {
-        return res.json({ message: "Invalid password" });
+        return res.status(404).json({ message: "Invalid password" });
     }
 
     //Create and assign a token
