@@ -19,11 +19,11 @@ router.post('/register', async (req, res) => {
     const phoneNumberExist = await User.findOne({ email: req.body.phoneNumber });
 
     if (emailExist) {
-        return res.json({ message: "Email already exists" });
+        return res.status(409).json({ message: "Email already exists" });
     }
 
     if (phoneNumberExist) {
-        return res.json({ message: "Phone number already exists" });
+        return res.status(409).json({ message: "Phone number already exists" });
     }
 
 
