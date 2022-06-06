@@ -36,7 +36,7 @@ const upload = multer({
 //butun nearmiss olaylarini getirme
 router.get('/', verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
     try {
-        const nearmisses = await NearMiss.find();
+        const nearmisses = await NearMiss.find().sort({ date: 'descending' });
         res.json(nearmisses);
     } catch (error) {
         res.json({ message: error });

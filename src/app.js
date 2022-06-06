@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 require("dotenv/config");
 const mongoose = require('mongoose');
+const socket = require('socket.io');
 
 const nearMissRoute = require("./routes/nearmiss")
 const authRoute = require("./routes/auth");
@@ -9,6 +10,8 @@ const contactsRoute = require("./routes/contacts");
 const newsRoute = require('./routes/news');
 const SuggestionsRoute = require('./routes/suggestions')
 
+
+const NearMissModel = require("./models/NearMiss");
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
@@ -34,6 +37,26 @@ mongoose.connect(
     }
 );
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(port + ". portta çalışıyor");
+});
+
+const io = socket(server);
+
+
+io.on('connection', (socket) => {
+    console.log('A user connected ' + socket.id);
+
+    socket.on("msg", (arg) => {
+        console.log(arg); // world
+    });
+
+    NearMissModel.watch().on("change", (change) => {
+        const dataString = JSON.stringify(change);
+        const dataObject = JSON.parse(dataString)
+
+        if (dataObject.operationType == "insert") {
+            socket.emit("added-nearmiss", dataObject.fullDocument);
+        }
+    });
 });
