@@ -2,13 +2,14 @@ const express = require("express");
 const router = express.Router();
 const User = require('../models/users');
 
-router.get("/", (req,res) => {
+
+router.get("/", (req, res) => {
     res.send("we are on register Page");
 
 })
 
 
-router.post("/", (req,res) => {
+router.post("/", (req, res) => {
     const user = new User({
         ppUrl: req.body.ppUrl,
         fcmToken: req.body.fcmToken,
@@ -27,7 +28,7 @@ router.post("/", (req,res) => {
 
         })
         .catch(err => {
-            res.json({message: err});
+            res.json({ message: err });
 
         })
 });
