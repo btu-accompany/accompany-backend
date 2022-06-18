@@ -1,23 +1,23 @@
 
 const express = require('express');
 const router = express.Router();
-const Post = require('../models/Suggestion');
+const Suggestion = require('../models/Suggestion');
 const verify = require("../utils/verifyToken");
 const ROLE = require("../utils/roles");
 
-// Gets all posts
+// Gets all suggestions
 router.get('/', verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
     try {
-        const posts = await Post.find();
-        res.json(posts);
+        const suggestions = await Suggestion.find();
+        res.json(suggestions);
     } catch (err) {
         res.json({ message: err });
     }
 });
 
-// post yüklüyor
+// suggestions yüklüyor
 router.post('/', verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
-    const post = new Post({
+    const suggestion = new Suggestion({
         type: req.body.type,
         name: req.body.name,
         fcmToken: req.body.fcmToken,
@@ -31,9 +31,9 @@ router.post('/', verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) 
         ppUrl: req.body.ppUrl
     });
     try {
-        const savedPost = await post.save();
+        const savedSuggestion = await suggestion.save();
 
-        res.json(savedPost);
+        res.json(savedSuggestion);
     } catch (err) {
         res.json({
             message: err
@@ -41,20 +41,20 @@ router.post('/', verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) 
     }
 });
 // get spesifik
-router.get('/:postId', verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
+router.get('/:suggestionId', verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
     try {
-        const post = await Post.findById(req.params.postId);
-        res.json(post);
+        const suggestion = await Suggestion.findById(req.params.suggestionId);
+        res.json(suggestion);
     }
     catch (err) {
         res.json({ message: err });
     }
 });
 // delete
-router.delete('/:postId', verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
+router.delete('/:suggestionId', verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
     try {
-        const removedPost = await Post.remove({ __id: req.params.postId })
-        res.json(removedPost);
+        const removedSuggestion = await Suggestion.remove({ __id: req.params.suggestionId })
+        res.json(removedSuggestion);
     }
     catch (err) {
         res.json({ message: err });

@@ -9,6 +9,7 @@ const authRoute = require("./routes/auth");
 const contactsRoute = require("./routes/contacts");
 const newsRoute = require('./routes/news');
 const SuggestionsRoute = require('./routes/suggestions')
+const NotificationRoute = require('./routes/notifications')
 
 
 const NearMissModel = require("./models/NearMiss");
@@ -22,6 +23,7 @@ app.use("/auth", authRoute);
 app.use("/contacts", contactsRoute);
 app.use('/news', newsRoute);
 app.use('/suggestions', SuggestionsRoute);
+app.use('/notifications', NotificationRoute);
 
 
 app.get("/", (req, res) => {

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const NearMissSchema = mongoose.Schema({
-    title: {
+const NotificationSchema = mongoose.Schema({
+    senderName: {
         type: String,
         required: true
     },
@@ -13,12 +13,9 @@ const NearMissSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    img: {
-        type: String,
-    },
-    senderName: {
-        type: String,
+    receivers: {
+        type: Array,
     }
 });
 
-module.exports = mongoose.model("NearMiss", NearMissSchema);
+module.exports = mongoose.model("Notification", NotificationSchema);

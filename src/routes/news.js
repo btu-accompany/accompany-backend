@@ -14,8 +14,6 @@ router.get('/', verify.authUser, verify.authRole(ROLE.BASIC), (req, res) => {
         url: "https://api.collectapi.com/news/getNews?country=tr&tag=technology",
         json: true,
         method: "GET"
-
-
     },
         function (error, response, body) {
             if (error) {

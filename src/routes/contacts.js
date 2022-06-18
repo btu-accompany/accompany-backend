@@ -3,6 +3,24 @@ const router = express.Router();
 const User = require('../models/users');
 const verify = require("../utils/verifyToken");
 const ROLE = require("../utils/roles");
+const multer = require('multer');
+const path = require("path");
+
+const storage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        callback(null, "uploads")
+    },
+    filename: (req, file, callback) => {
+        callback(null, Date.now() + ".jpg");
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 6
+    },
+});
 
 router.get("/", verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
     try {
@@ -33,6 +51,43 @@ router.get("/:userId", verify.authUser, verify.authRole(ROLE.BASIC), async (req,
     try {
         const contacts = await User.findById(req.params.userId);
         res.json(contacts);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
+router.get("/getbyphonenumber/:phonenumber", verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
+    try {
+        const user = await User.findOne({ "phoneNumber": req.params.phonenumber });
+        res.json(user);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
+//güncelleme
+router.patch("/update/:userId", verify.authUser, verify.authRole(ROLE.BASIC), upload.single("ppUrl"), async (req, res) => {
+    try {
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: req.params.userId },
+            {
+                $set: {
+                    name: req.body.name,
+                    departmant: req.body.departmant,
+                    email: req.body.email,
+                    address: req.body.address,
+                    phoneNumber: req.body.phoneNumber,
+                }
+            },
+            { new: true }
+        );
+        const updatedUser2 = await User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $set: { ppUrl: req.file.path } },
+            { new: true }
+        );
+
+        res.json(updatedUser2);
     } catch (err) {
         res.json({ message: err });
     }
