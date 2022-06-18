@@ -56,7 +56,7 @@ router.get("/:userId", verify.authUser, verify.authRole(ROLE.BASIC), async (req,
     }
 });
 
-router.get("/getbyphonenumber/:phonenumber", verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
+router.get("/getbyphonenumber/:phonenumber", async (req, res) => {
     try {
         const user = await User.findOne({ "phoneNumber": req.params.phonenumber });
         res.json(user);
@@ -92,6 +92,25 @@ router.patch("/update/:userId", verify.authUser, verify.authRole(ROLE.BASIC), up
         res.json({ message: err });
     }
 });
+
+//fcm token guncelleme
+router.patch("/update/fcmtoken/:userId", async (req, res) => {
+    try {
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: req.params.userId },
+            {
+                $set: {
+                    fcmToken: req.body.fcmToken,
+                }
+            },
+            { new: true }
+        );
+        res.json(updatedUser);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
 
 module.exports = router;
 
