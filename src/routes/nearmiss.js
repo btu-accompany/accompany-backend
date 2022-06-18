@@ -57,10 +57,12 @@ router.get("/:nearmiss_id", verify.authUser, verify.authRole(ROLE.BASIC), async 
 // near miss olayi kaydet
 router.post("/", verify.authUser, verify.authRole(ROLE.BASIC), upload.single("img"), async (req, res) => {
 
+    console.log("FİLE: " + req.file.path);
     const nearmiss = new NearMiss({
         title: req.body.title,
         description: req.body.description,
-        img: req.file.path
+        img: req.file.path,
+        senderName: req.body.senderName
     });
 
 

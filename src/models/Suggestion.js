@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const SuggestionSchema = mongoose.Schema({
     type: {
         type: String,
