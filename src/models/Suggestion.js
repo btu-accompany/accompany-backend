@@ -2,31 +2,16 @@ const mongoose = require('mongoose');
 
 
 const SuggestionSchema = mongoose.Schema({
-    type: {
-        type: String,
-        required: true
-
-    },
     name: {
         type: String,
         required: true
 
-    },
-    fcmToken: {
-        type: String,
-        required: true
     },
     surname: {
         type: String,
         required: true
 
     },
-    department: {
-        type: String,
-        required: true
-
-    },
-
     topic: {
         type: String,
         required: true
@@ -37,17 +22,8 @@ const SuggestionSchema = mongoose.Schema({
         required: true
 
     },
-    ppUrl: {
-        type: String,
-        required: true
 
-    },
     phoneNumber: {
-        type: String,
-        required: true
-
-    },
-    userId: {
         type: String,
         required: true
 
