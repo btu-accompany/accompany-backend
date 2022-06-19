@@ -24,28 +24,13 @@ const upload = multer({
 
 router.get("/", verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
     try {
-        const contacts = await User.find();
+        const contacts = await User.find().sort({ date: 'descending' });;
         res.json(contacts);
     } catch (err) {
         res.json({ message: err });
     }
 });
 
-
-
-// router.get("/search", verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
-
-//     try {
-//         const searchedName = "Ke";
-//         // const foundUsers = User.find({ name: { $regex: searchedName, $options: 'i' } } || { surname: { $regex: searchedName, $options: 'i' } });
-//         const foundUsers = User.find({ name: { $regex: '.*' + searchedName + '.*' } }).limit(5);
-//         console.log(foundUsers);
-//         res.send("test");
-
-//     } catch (err) {
-//         res.json({ message: err });
-//     }
-// });
 
 router.get("/:userId", verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
     try {
