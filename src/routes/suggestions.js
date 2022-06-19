@@ -8,7 +8,7 @@ const ROLE = require("../utils/roles");
 // Gets all suggestions
 router.get('/', verify.authUser, verify.authRole(ROLE.BASIC), async (req, res) => {
     try {
-        const suggestions = await Suggestion.find();
+        const suggestions = await Suggestion.find().sort({ date: 'descending' });;
         res.json(suggestions);
     } catch (err) {
         res.json({ message: err });
